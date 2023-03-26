@@ -20,7 +20,7 @@ speed = { 47.87, 35.02, 29.79, 24.13, 13.06, 9.66, 6.80, 5.44, 4.74, 0 } ,
 
 // ТАБЛИЦА БОЛЬШИХ ПОЛУОСЕЙ ОРБИТ
 // Большая полуось (а.е.)
-a = { 0.387, 0.723, 1, 1.52, 5.2026, 9.5549, 19.218, 30.11038, 39.5181, 0.01 } , 
+a = { 0.387, 0.723, 1, 1.52, 5.2026, 9.5549, 19.218, 30.11038, 39.5181, 0.0 } , 
 
 // ТАБЛИЦА МАЛЫХ ПОЛУОСЕЙ ОРБИТ
 // Малая полуось (а.е.)
@@ -44,7 +44,6 @@ periodsOfPlanets = { 0.241, 0.615, 1.0, 1.881, 11.857, 29.426, 83.749, 163.727, 
 
 
 int zoomSize = 200;
-int zoomRadius = zoomSize / 2;
 int scaleSizeOfPlanet = 5;
 
 
@@ -108,11 +107,11 @@ void planetsdraw() {
 	for (int num = 0; num <= 9; num++) {
 		// рисуем орбиту (эллипс)
 		noFill();
-		stroke(255, 255, 255, 128);
-		ellipse(0, 0, a[num] * zoomSize, b[num] * zoomSize);
+		stroke(255, 255, 255, 255);
+		ellipse( -a[num] * e[num] * zoomSize, 0, a[num] * 2 * zoomSize, b[num] * 2 * zoomSize);
 		
 		// рисуем подписи к планете
-		translate(a[num] * sin(angle[num]) * zoomRadius, b[num] * cos(angle[num]) * zoomRadius, 0);
+		translate(a[num] * sin(angle[num]) * zoomSize  - a[num]  * e[num] * zoomSize , b[num] * cos(angle[num]) * zoomSize , 0);
 		rotateZ(PI);
 		fill(255, 0, 0);
 		if (wheelMouse > 6 && num > 3) {
@@ -142,7 +141,7 @@ void planetsdraw() {
 		
 		rotateZ( -PI * angleOfAxis[num] / 360);
 		rotateX( -PI / 2);
-		translate( -a[num] * sin(angle[num]) * zoomRadius, -b[num] * cos(angle[num]) * zoomRadius, 0);
+		translate( -(a[num] * sin(angle[num]) * zoomSize  - a[num]  * e[num] * zoomSize) ,  - b[num] * cos(angle[num]) * zoomSize , 0);
 	}
 	float alfa = wheelMouse;
 	if (alfa <= 0) { 
