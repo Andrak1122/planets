@@ -37,7 +37,7 @@ angle = { 253, 181, 100, 355, 34, 50, 314, 304, 0 , 0 } ,
 sizeOfPlanets = { 0.382, 0.949, 1.0, 0.53, 11.2, 9.41, 3.98, 3.81, 0.186, 109 / 25 } , 
 
 // углы наклонов осей вращения планет в плоскости эклиптики
-angleOfAxis = { 0, 177.36, 23.45, 25.19, 3.13, 25.33, 97.86, 28.31, 122.52, 50 } ,
+angleOfAxis = { 0, 177.36, 23.45, 25.19, 3.13, 25.33, 97.86, 28.31, 122.52, 0 } ,
 
 // периоды обращений (в земных года)
 periodsOfPlanets = { 0.241, 0.615, 1.0, 1.881, 11.857, 29.426, 83.749, 163.727, 248, 1.0 };
@@ -124,9 +124,11 @@ void planetsdraw() {
 			fill(255);
 		}
 		
+		
 		rotateZ( -PI);
 		rotateX(PI / 2);
 		rotateZ(PI * angleOfAxis[num] / 360);
+		rotateY(epoch * 0.01);
 		
 		// рисуем планету
 		
@@ -136,9 +138,23 @@ void planetsdraw() {
 		sp.setStroke(false);
 		sp.setTexture(imageOfPlanet[num]);
 		shape(sp);
+		//если Сатурн
+		if (num == 5) {
+			rotateX(PI / 2);
+			noFill();
+			stroke(255, 255, 255, 128);
+			for (int ring = 0; ring < 20; ring++) {
+				ellipse(0,0, sizeOfPlanets[num] * 3 + ring * 5 + 20, sizeOfPlanets[num] * 3 + ring * 5 + 20);
+				
+			}
+			// ellipse(0,0, sizeOfPlanets[num] * 3 + 80, sizeOfPlanets[num] * 3 + 80);
+			// ellipse(0,0, sizeOfPlanets[num] * 3 + 110, sizeOfPlanets[num] * 3 + 110);
+			rotateX( -PI / 2);
+		}
 		//sphere(sizeOfPlanets[num]);
 		//endShape();
 		
+		rotateY( -epoch * 0.01);
 		rotateZ( -PI * angleOfAxis[num] / 360);
 		rotateX( -PI / 2);
 		translate( -(a[num] * sin(angle[num]) * zoomSize  - a[num]  * e[num] * zoomSize) ,  - b[num] * cos(angle[num]) * zoomSize , 0);
