@@ -1,4 +1,4 @@
-float diff, xmag, ymag, newMWeel = 1, wheelMouse = 0, newXmag = 0, newYmag = 0;
+float diff, xmag, ymag, newMWheel = 1, wheelMouse = 0, newXmag = 0, newYmag = 0;
 
 // коэффицент
 int d = 200 * 5;
@@ -122,7 +122,7 @@ void calculate() {
   rotateX( -ymag);
   rotateY( -xmag);
   // МАСШТАБ
-  scale(newMWeel - wheelMouse / 10);
+  scale(newMWheel - wheelMouse / 10);
   
 }
 
