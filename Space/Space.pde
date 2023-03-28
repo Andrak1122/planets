@@ -1,6 +1,6 @@
 float diff, xmag, ymag, newMWeel = 1, wheelMouse = 0, newXmag = 0, newYmag = 0;
 
-// коэффици
+// коэффицент
 int d = 200 * 5;
 
 // год
@@ -90,22 +90,44 @@ void setup() {
 	}
 }
 
+// Считывание колёсика мыши
 void mouseWheel(MouseEvent event) {
 	wheelMouse += event.getCount();
-	if (wheelMouse >= 12) {
-		wheelMouse = 11;
-	}
-}
-void planets() {
-	for (int num = 0; num <= 9; num++) {
-		if (keyPressed != true) {
-			epoch++;
-			angle[num] = (angle[num] + (1) / periodsOfPlanets[num] * TWO_PI * 0.01);
-		}
+	if (wheelMouse >= 10) {
+		wheelMouse = 9;
 	}
 }
 
+void calculate() {
+  translate(width / 2, height / 2, -30);
+  // РАСЧИТАТЬ ПОЛОЖЕНИЕ ПЛАНЕТ
+	for (int num = 0; num <= 9; num++) {
+		if (keyPressed != true) {
+			angle[num] = (angle[num] + (1) / periodsOfPlanets[num] * TWO_PI * 0.01);
+		}
+	}
+  if (keyPressed != true) {
+      epoch += 0.01;
+  }
+  
+  // УГОЛ ПОВОРОТА КАМЕРЫ
+  if (mousePressed && (mouseButton == LEFT)) {
+    newXmag = mouseX / float(width) * TWO_PI;
+    newYmag = mouseY / float(height) * TWO_PI;
+    diff = xmag - newXmag;
+    xmag -= diff / 4.0;
+    diff = ymag - newYmag;
+    ymag -= diff / 4.0;
+  }
+  rotateX( -ymag);
+  rotateY( -xmag);
+  // МАСШТАБ
+  scale(newMWeel - wheelMouse / 10);
+  
+}
+
 void planetsdraw() {
+  
 	for (int num = 0; num <= 9; num++) {
 		// рисуем орбиту (эллипс)
 		noFill();
@@ -116,6 +138,7 @@ void planetsdraw() {
 		translate(a[num] * sin(angle[num]) * zoomSize  - a[num]  * e[num] * zoomSize , b[num] * cos(angle[num]) * zoomSize , 0);
 		rotateZ(PI);
 		fill(255, 0, 0);
+    // если отдалиться то увеличивать масштаб
 		if (wheelMouse > 6 && num > 3) {
 			textSize(20 * wheelMouse);
 			text(names[num], sizeOfPlanets[num] * wheelMouse + 10, sizeOfPlanets[num] * wheelMouse + 10);
@@ -130,7 +153,7 @@ void planetsdraw() {
 		rotateZ( -PI);
 		rotateX(PI / 2);
 		rotateZ(PI * angleOfAxis[num] / 360);
-		rotateY(epoch * 0.01);
+		rotateY(epoch *3);
 		
 		// рисуем планету
 		
@@ -140,7 +163,7 @@ void planetsdraw() {
 		sp.setStroke(false);
 		sp.setTexture(imageOfPlanet[num]);
 		shape(sp);
-		//если Сатурн
+		//если Сатурн (КОЛЬЦА)
 		if (num == 5) {
 			rotateX(PI / 2);
 			noFill();
@@ -156,11 +179,12 @@ void planetsdraw() {
 		//sphere(sizeOfPlanets[num]);
 		//endShape();
 		
-		rotateY( -epoch * 0.01);
+		rotateY( -epoch *3);
 		rotateZ( -PI * angleOfAxis[num] / 360);
 		rotateX( -PI / 2);
 		translate( -(a[num] * sin(angle[num]) * zoomSize  - a[num]  * e[num] * zoomSize) ,  - b[num] * cos(angle[num]) * zoomSize , 0);
 	}
+  // РИСУЕМ ФОН
 	float alfa = wheelMouse;
 	if (alfa <= 0) { 
 		alfa = 1;}
@@ -173,27 +197,16 @@ void planetsdraw() {
 
 
 void draw() {
+  // РАСЧЁТ ПАРАМЕТРОВ ДЛЯ ПОЛЬЗОВАТЕЛЯ
 	float fps = (1000 / (millis() - prevTime));
 	prevTime = millis();
-	// epoch++;
-	// background(imageOfPlanet[10]);
-	// background(skyImage);
 	background(0);
 	textSize(20);
 	fill(0,255,0);
 	text(str(fps) + ' ' + str(epoch), 10 , 30);
-	planets();
-	translate(width / 2, height / 2, -30);
-	if (mousePressed && (mouseButton == LEFT)) {
-		newXmag = mouseX / float(width) * TWO_PI;
-		newYmag = mouseY / float(height) * TWO_PI;
-		diff = xmag - newXmag;
-		xmag -= diff / 4.0;
-		diff = ymag - newYmag;
-		ymag -= diff / 4.0;
-	}
-	scale(newMWeel - wheelMouse / 10);
-	rotateX( -ymag);
-	rotateY( -xmag);
+  
+  // ОТРИСОВКА ПЛАНЕТ
+
+  calculate();
 	planetsdraw();
 }
