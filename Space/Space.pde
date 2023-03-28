@@ -61,7 +61,7 @@ String[] names = {
 	"Солнце"
 };
 
-PImage[] imageOfPlanet;
+PImage[] imageOfPlanet ;// = new PImage[10];
 
 void setup() {
 	size(1920, 1000, P3D);
