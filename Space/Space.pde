@@ -9,7 +9,7 @@ float epoch = 2000;
 // предыдущее время от начала запуска
 int prevTime;
 
-PImage skyImage;
+PImage skyImage ;
 
 // 1 a.e. = 149 597 870 км
 
@@ -61,31 +61,33 @@ String[] names = {
 	"Солнце"
 };
 
-PImage[] imageOfPlanet ;// = new PImage[10];
+PImage[] imageOfPlanet  = new PImage[10];
 
 void setup() {
+  // УСТАНОВИТЬ РАЗМЕР ЭКРАНА
 	size(1920, 1000, P3D);
-	
+	frameRate(60);
+  sphereDetail(50);
+  textureMode(NORMAL);
+  
+  
+  // РАСЧЁТ И ЗАГРУЗКА
 	skyImage = loadImage("images/sky.jpg");
 	prevTime = millis();
 	
-	frameRate(60);
-	// b = new float[10];
-	imageOfPlanet = new PImage[11];
-	// imageOfPlanet[10] = loadImage("images/sky.jpg");
-	sphereDetail(50);
 	for (int i = 0; i <= 9; i++) {
+    // ПОСЧИТАТЬ РАЗМЕРЫ БОЛЬШИХ ПОЛУОСЕЙ
 		b[i] = a[i] * sqrt(1 - sq(e[i]));
+
+    // ЗАГРУЗИТЬ КАРТИНКИ ПОВЕРХНОСТЕЙ ПЛАНЕТ
 		imageOfPlanet[i] = loadImage("images/im" + str(i) + ".jpg");
+
+    // МАСШТАБИРОВАТЬ ПЛАНЕТЫ
 		sizeOfPlanets[i] = sizeOfPlanets[i] * scaleSizeOfPlanet;
+
+    // ПЕРЕВЕСТИ УГОЛ В РАДИАНЫ
 		angle[i] = angle[i] / 180 * PI;
 	}
-	
-	//imageOfPlanet = loadImage("http://localhost:5000/uploads/im"+".jpg");
-	//imageOfPlanet = loadImage("sun.jpg");
-	textureMode(NORMAL);
-	
-	
 }
 
 void mouseWheel(MouseEvent event) {

@@ -61,4 +61,4 @@ String[] names = {
   "Солнце"
 };
 
-PImage[] imageOfPlanet;
+PImage[] imageOfPlanet  = new PImage[10];
